@@ -1,3 +1,5 @@
+from django.contrib.postgres.search import TrigramSimilarity
+from django.db.models import Q
 from django.shortcuts import render, get_object_or_404
 from apps.countries.models import Country
 from django.template.defaultfilters import slugify
@@ -38,6 +40,26 @@ def get_countries(request):
     countries = Country.objects.all()
     context = {
         'countries': countries
+    }
+    return render (request, 'web/countries.html', context)
+
+def search_countries(request):
+    country_search = request.GET.get('country_search', None)
+    countries = Country.objects.annotate(
+        similarity_en = TrigramSimilarity('name_english', country_search)
+    ).annotate(
+        similarity_es = TrigramSimilarity('name_spanish', country_search)
+    ).filter(
+        Q(similarity_en__gte = 0.25) |
+        Q(similarity_es__gte = 0.25) |
+        Q(code_alpha_two = country_search.upper()) |
+        Q(code_alpha_three = country_search.upper()) |
+        Q(name_english__icontains = country_search) |
+        Q(name_spanish__icontains = country_search)
+    )
+    context = {
+        'countries': countries,
+        'country_search': country_search
     }
     return render (request, 'web/countries.html', context)
 

@@ -18,9 +18,9 @@
             <a class="navbar-brand" href="index.html">COVID Dashboard</a>
             <button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle" href="#"><i class="fas fa-bars"></i></button>
             <!-- Navbar Search-->
-            <form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
+            <form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0" action="{% url 'countries:search-countries' %}">
                 <div class="input-group">
-                    <input class="form-control" type="text" placeholder="Buscar país..." aria-label="Search" aria-describedby="basic-addon2" />
+                    <input class="form-control" type="text" placeholder="Buscar país..." aria-label="Search" aria-describedby="basic-addon2" name="country_search" value="{{country_search}}" required/>
                     <div class="input-group-append">
                         <button class="btn btn-primary" type="button"><i class="fas fa-search"></i></button>
                     </div>
@@ -42,11 +42,11 @@
                     <div class="sb-sidenav-menu">
                         <div class="nav">
                             <div class="sb-sidenav-menu-heading">Casos</div>
-                            <a class="nav-link" href="index.html">
+                            <a class="nav-link" href="{% url 'cases:home' %}">
                                 <div class="sb-nav-link-icon"><i class="fas fa-globe-americas"></i></div>
                                 Global
                             </a>
-                            <a class="nav-link" href="index.html">
+                            <a class="nav-link" href="{% url 'countries:countries' %}">
                                 <div class="sb-nav-link-icon"><i class="fas fa-flag"></i></div>
                                 Por Países
                             </a>
