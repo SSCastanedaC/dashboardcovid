@@ -23,5 +23,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/login/', auth_views.LoginView.as_view(template_name='web/login.html'), name='login'),
     path('accounts/logout/', auth_views.LogoutView.as_view(), {'next_page': settings.LOGOUT_REDIRECT_URL}, name='logout'),
-    path('cases/', include(('apps.cases.urls', 'cases'), namespace='cases'))
+    path('cases/', include(('apps.cases.urls', 'cases'), namespace='cases')),
+    path('countries/', include(('apps.countries.urls', 'countries'), namespace='countries')),
 ]

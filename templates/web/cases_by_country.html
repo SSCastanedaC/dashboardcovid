@@ -1,0 +1,95 @@
+{% extends 'web/master.html' %}
+
+{% load staticfiles %}
+{% load humanize %}
+
+{% block content %}
+
+<div class="container-fluid">
+    <h1 class="mt-4">Casos Actuales - {{cases.0.lastUpdate}}</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item active">{{ country.name_spanish }} - {{ country.name_english }}</li>
+    </ol>
+    <div class="row">
+        <div class="col-xl-3 col-md-6">
+            <div class="card bg-primary text-white mb-4">
+                <div class="card-body">Confirmados</div>
+                <div class="card-footer d-flex align-items-center justify-content-between">
+                    <label class="small text-white">{{ cases.0.confirmed|intcomma }}</label>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="card bg-warning text-white mb-4">
+                <div class="card-body">Recuperados</div>
+                <div class="card-footer d-flex align-items-center justify-content-between">
+                    <label class="small text-white">{{ cases.0.recovered|intcomma }}</label>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="card bg-success text-white mb-4">
+                <div class="card-body">Fallecidos</div>
+                <div class="card-footer d-flex align-items-center justify-content-between">
+                    <label class="small text-white">{{ cases.0.deaths|intcomma }}</label>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="card bg-danger text-white mb-4">
+                <div class="card-body">Críticos</div>
+                <div class="card-footer d-flex align-items-center justify-content-between">
+                    <label class="small text-white">{{ cases.0.critical|intcomma }}</label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="fas fa-table mr-1"></i>
+            Histórico de Casos por Provincias
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Provincia</th>
+                            <th>Confirmados</th>
+                            <th>Recuperados</th>
+                            <th>Activos</th>
+                            <th>Fallecidos</th>
+                            <th>Fecha</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for province in provinces.0.provinces %}
+                        <tr>
+                            <td>{{province.province}}</td>
+                            <td>{{province.confirmed|intcomma}}</td>
+                            <td>{{province.recovered|intcomma}}</td>
+                            <td>{{province.active|intcomma}}</td>
+                            <td>{{province.deaths|intcomma}}</td>
+                            <td>{{provinces.0.date}}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+
+<script>
+
+var cases = {{cases|safe}}
+
+</script>
+
+<script src="{% static 'assets/demo/active-cases.js' %}"></script>
+
+{% endblock %}
