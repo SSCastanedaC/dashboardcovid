@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.humanize',
     'apps.cases',
     'apps.countries',
 ]
@@ -127,3 +128,8 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (os.path.join(BASE_DIR, 'templates/static'),)
+
+headers_rapidapi = {
+    'x-rapidapi-key': "dc94ab56dcmshfa9f4aa92abbe8fp172759jsne47737395746",
+    'x-rapidapi-host': "covid-19-data.p.rapidapi.com"
+}
