@@ -25,4 +25,5 @@ urlpatterns = [
     path('accounts/logout/', auth_views.LogoutView.as_view(), {'next_page': settings.LOGOUT_REDIRECT_URL}, name='logout'),
     path('cases/', include(('apps.cases.urls', 'cases'), namespace='cases')),
     path('countries/', include(('apps.countries.urls', 'countries'), namespace='countries')),
+    path('users/', include(('apps.users.urls', 'countries'), namespace='users')),
 ]
