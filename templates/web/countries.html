@@ -1,0 +1,46 @@
+{% extends 'web/master.html' %}
+
+{% load staticfiles %}
+{% load humanize %}
+
+{% block content %}
+
+<div class="container-fluid">
+    <h1 class="mt-4">Casos en el Mundo</h1>
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="fas fa-table mr-1"></i>
+            Lista de Países y Territorios Autónomos
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Nombre (ES)</th>
+                            <th>Nombre (EN)</th>
+                            <th>Código Alfa-2</th>
+                            <th>Código Alfa-3</th>
+                            <th>Detalles</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for country in countries %}
+                        <tr>
+                            <td>{{country.name_spanish}}</td>
+                            <td>{{country.name_english}}</td>
+                            <td>{{country.code_alpha_two}}</td>
+                            <td>{{country.code_alpha_three}}</td>
+                            <td>
+                                <a class="btn btn-info" href="{% url 'countries:cases-country' country.code_alpha_three %}">Ver</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
