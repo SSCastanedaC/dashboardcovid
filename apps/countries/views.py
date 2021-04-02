@@ -27,13 +27,24 @@ def save_countries():
         new_country = Country()
         new_country.name_spanish = country_name_es
         new_country.name_english = country_name_en
-        new_country.slug_spanish = slugify(country_name_en)
+        new_country.slug_spanish = slugify(country_name_es)
         new_country.slug_english = slugify(country_name_en)
         new_country.code_alpha_two = country['alpha2Code']
         new_country.code_alpha_three = country['alpha3Code']
         available_countries.append(new_country)
     Country.objects.bulk_create(available_countries)
     context = {}
+    return True
+
+def fix_slug():
+    countries = Country.objects.all()
+    fixed_countries = []
+    for country in countries:
+        new_country = Country()
+        new_country.id = country.id
+        new_country.slug_spanish = slugify(country.name_spanish)
+        fixed_countries.append(new_country)
+    Country.objects.bulk_update(fixed_countries, ['slug_spanish'])
     return True
 
 def get_countries(request):
