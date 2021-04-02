@@ -1,5 +1,4 @@
 from django.shortcuts import render
-from apps.cases.models import Case
 from dashboardcovid.settings import headers_rapidapi
 import requests
 import datetime
