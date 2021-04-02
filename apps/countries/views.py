@@ -4,7 +4,7 @@ from django.template.defaultfilters import slugify
 from dashboardcovid.settings import headers_rapidapi
 import requests
 import json
-from googletrans import Translator
+from deep_translator import GoogleTranslator
 import datetime
 import time
 
@@ -19,10 +19,8 @@ def save_countries():
     for country in countries:
         country_name_en = country['name']
         try:
-            translator = Translator()
-            translation = translator.translate(country_name_en, dest='spanish')
-            country_name_es = str(translation.text)
-        except:
+            country_name_es = GoogleTranslator(source='en', target='es').translate(country_name_en)            
+        except Exception as e:
             country_name_es = country_name_en
         new_country = Country()
         new_country.name_spanish = country_name_es
