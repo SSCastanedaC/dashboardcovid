@@ -12,6 +12,7 @@ import time
 
 # Create your views here.
 
+#Se utiliza una API para obtener el listado de países en inglés
 def save_countries():
     Country.objects.all().delete()
     url = 'https://restcountries.eu/rest/v2/all'
@@ -20,6 +21,8 @@ def save_countries():
     available_countries = []
     for country in countries:
         country_name_en = country['name']
+        #Se utiliza Google Translator para traducir el nombre del país
+        #En caso de error en la traducción, el nombre del país queda igual que el original 
         try:
             country_name_es = GoogleTranslator(source='en', target='es').translate(country_name_en)            
         except Exception as e:
@@ -32,10 +35,12 @@ def save_countries():
         new_country.code_alpha_two = country['alpha2Code']
         new_country.code_alpha_three = country['alpha3Code']
         available_countries.append(new_country)
+    #Se crean los países de forma masiva
     Country.objects.bulk_create(available_countries)
-    context = {}
     return True
 
+#Se corrige el slug en español de los países
+#Se utiliza bulk_update para actualizar los registros de forma masiva
 def fix_slug():
     countries = Country.objects.all()
     fixed_countries = []
@@ -56,6 +61,9 @@ def get_countries(request):
 
 def search_countries(request):
     country_search = request.GET.get('country_search', None)
+    #La búsqueda se puede hacer por nombre o por código alfa
+    #Se utiliza trigram search sobre los nombres en inglés y en español
+    #Se reduce el valor del threshold para ampliar los valores de búsqueda
     countries = Country.objects.annotate(
         similarity_en = TrigramSimilarity('name_english', country_search)
     ).annotate(
@@ -76,7 +84,7 @@ def search_countries(request):
 
 def get_cases_by_country(request, country_code_alpha_three):
     country = get_object_or_404(Country, code_alpha_three = country_code_alpha_three)
-    #General
+    #Se obtienen los casos actuales por país
     url = 'https://covid-19-data.p.rapidapi.com/country/code'
     querystring = {
         'code': country.code_alpha_three,
@@ -84,7 +92,8 @@ def get_cases_by_country(request, country_code_alpha_three):
     response = requests.request('GET', url, headers=headers_rapidapi, params=querystring)
     cases = response.json()
     time.sleep(1)
-    #Provincias
+    #Se obtienen los casos del 2020-06-18 por provincia
+    #Se utiliza esa fecha porque es la última de la cual se obtienen datos
     url = 'https://covid-19-data.p.rapidapi.com/report/country/code'
     querystring = {
         'code': country.code_alpha_three,
